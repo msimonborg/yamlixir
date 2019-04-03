@@ -1,13 +1,22 @@
 defmodule Yamlixir.MixProject do
   use Mix.Project
 
+  @project_url "https://github.com/msimonborg/yamlixir"
+
   def project do
     [
       app: :yamlixir,
       version: "0.1.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: "WIP: YAML parser for Elixir.",
+      package: package(),
+      aliases: aliases(),
+      source_url: @project_url,
+      homepage_url: @project_url,
+      preferred_cli_env: preferred_cli_env(),
+      name: "Yamlixir"
     ]
   end
 
@@ -21,8 +30,26 @@ defmodule Yamlixir.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:ex_doc, "~> 0.19.3", only: [:dev, :test]}
+    ]
+  end
+
+  defp package do
+    [
+      licenses: ["MIT"],
+      links: %{"Github" => @project_url}
+    ]
+  end
+
+  defp aliases do
+    [
+      "yamlixir.build": ["format --check-equivalent", "test", "docs"]
+    ]
+  end
+
+  defp preferred_cli_env do
+    [
+      "yamlixir.build": :test
     ]
   end
 end
