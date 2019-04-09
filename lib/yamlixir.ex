@@ -1,11 +1,11 @@
 defmodule Yamlixir do
   @moduledoc ~S"""
-  Yaml parser for Elixir.
+  Simple YAML parser for Elixir.
   """
 
   @type yaml :: String.t() | charlist
   @type options :: keyword
-  @type decoded :: [any]
+  @type decoded :: [any] | Yamlixir.DecodingError.t()
 
   @default_options [
     detailed_constr: true,
@@ -13,9 +13,9 @@ defmodule Yamlixir do
   ]
 
   @doc ~S"""
-  Decodes a string of valid Yaml into Elixir data.
+  Decodes a string of valid YAML into Elixir data.
 
-  Returns `{:ok, parsed}`.
+  Returns `{:ok, decoded}` on success and `{:error, %Yamlixir.DecodingError{}}` on failure.
 
   ## Examples
 
@@ -37,7 +37,7 @@ defmodule Yamlixir do
 
   @doc ~S"""
   The same as `decode/2` but raises a `Yamlixir.DecodingError` exception if it fails.
-  Returns the decoded yaml otherwise.
+  Returns the decoded YAML otherwise.
 
   ## Examples
 
@@ -61,6 +61,25 @@ defmodule Yamlixir do
       {:error, exception} -> raise exception
     end
   end
+
+  @doc ~s"""
+  Handles the sigil `~y` for decoding YAML.
+
+  It passes the string to `decode!/2`, returning the decoded data. Raises a
+  `Yamlixir.DecodingError` exception when given invalid YAML.
+
+  ## Examples
+
+      import Yamlixir, only: [sigil_y: 2]
+      ~y\"\"\"
+      a: b
+      c: d
+      \"\"\"
+      #=> [%{"a" => "b", "c" => "d"}]
+
+  """
+  @spec sigil_y(yaml, list) :: decoded
+  def sigil_y(yaml, []), do: decode!(yaml)
 
   defp do_decode(yaml, options) do
     options = Keyword.merge(options, @default_options)
