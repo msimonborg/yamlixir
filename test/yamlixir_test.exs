@@ -99,6 +99,26 @@ defmodule YamlixirTest do
            ] == Yamlixir.decode!(yaml)
   end
 
+  test "decode/2 option `:at` returns a single document at the correct position" do
+    yaml = fixture("multi")
+
+    assert {:ok, %{"z" => "z", "x" => 1, "y" => true, "w" => nil, "v" => []}} ==
+             Yamlixir.decode(yaml, at: -1)
+
+    assert {:ok, %{"a" => "a", "b" => 1, "c" => true, "d" => nil, "e" => []}} ==
+             Yamlixir.decode(yaml, at: 0)
+  end
+
+  test "decode!/2 option `:at` returns a single document at the correct position" do
+    yaml = fixture("multi")
+
+    assert %{"z" => "z", "x" => 1, "y" => true, "w" => nil, "v" => []} ==
+             Yamlixir.decode!(yaml, at: -1)
+
+    assert %{"a" => "a", "b" => 1, "c" => true, "d" => nil, "e" => []} ==
+             Yamlixir.decode!(yaml, at: 0)
+  end
+
   test "decode/2 should decode yaml with multiple empty documents" do
     yaml = fixture("multi_empty")
     assert {:ok, [%{}, %{}, %{}]} == Yamlixir.decode(yaml)

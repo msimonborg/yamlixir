@@ -88,6 +88,7 @@ defmodule Yamlixir do
       yaml
       |> :yamerl_constr.string(options)
       |> Yamlixir.YamerlParser.parse()
+      |> at(options)
 
     {:ok, decoded}
   catch
@@ -96,5 +97,13 @@ defmodule Yamlixir do
 
     _, _ ->
       {:error, %Yamlixir.DecodingError{}}
+  end
+
+  defp at(decoded, options) do
+    case Keyword.get(options, :at) do
+      nil -> decoded
+      at when is_integer(at) -> Enum.at(decoded, at)
+      _ -> raise ArgumentError, "value given to option `:at` must be an integer"
+    end
   end
 end
