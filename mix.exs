@@ -6,8 +6,8 @@ defmodule Yamlixir.MixProject do
   def project do
     [
       app: :yamlixir,
-      version: "0.1.0",
-      elixir: "~> 1.8",
+      version: "1.0.0",
+      elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: "WIP: YAML parser for Elixir.",
