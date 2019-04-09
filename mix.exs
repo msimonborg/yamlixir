@@ -30,6 +30,7 @@ defmodule Yamlixir.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:yamerl, "~> 0.7"},
       {:ex_doc, "~> 0.19.3", only: [:dev, :test]}
     ]
   end
