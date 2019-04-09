@@ -36,15 +36,15 @@ defmodule Yamlixir.YamerlParser do
         )
 
       {_yamler_element, _yamler_node_element, _tag, _log, name} ->
-        tuples_to_map(rest, Map.put_new(map, key(name, options), do_parse(val, options)), options)
+        tuples_to_map(
+          rest,
+          Map.put_new(map, key(name, options[:keys]), do_parse(val, options)),
+          options
+        )
     end
   end
 
-  def key(name, options) do
-    case Keyword.get(options, :keys) do
-      :atoms -> String.to_atom(name)
-      :atoms! -> String.to_existing_atom(name)
-      _ -> name
-    end
-  end
+  def key(name, :atoms), do: String.to_atom(name)
+  def key(name, :atoms!), do: String.to_existing_atom(name)
+  def key(name, _), do: name
 end

@@ -5,7 +5,8 @@ defmodule Yamlixir do
 
   @type yaml :: String.t() | charlist
   @type options :: keyword
-  @type decoded :: [any] | Yamlixir.DecodingError.t()
+  @type decoded :: [any]
+  @type error :: Yamlixir.DecodingError.t()
 
   @default_options [
     detailed_constr: true,
@@ -39,7 +40,7 @@ defmodule Yamlixir do
       {:ok, [%{"a" => "b", "c" => "d"}]}
 
   """
-  @spec decode(yaml, options) :: {:ok, decoded}
+  @spec decode(yaml, options) :: {:ok, decoded} | {:error, error}
   def decode(yaml, options \\ []), do: do_decode(yaml, options)
 
   @doc ~S"""
@@ -93,6 +94,7 @@ defmodule Yamlixir do
   def sigil_y(yaml, []), do: decode!(yaml)
   def sigil_y(yaml, [?a]), do: decode!(yaml, keys: :atoms!)
 
+  @spec do_decode(yaml, options) :: {:ok, decoded} | {:error, error}
   defp do_decode(yaml, options) do
     options = Keyword.merge(options, @default_options)
 
@@ -100,7 +102,7 @@ defmodule Yamlixir do
       yaml
       |> :yamerl_constr.string(options)
       |> Yamlixir.YamerlParser.parse(options)
-      |> at(options)
+      |> at(options[:at])
 
     {:ok, decoded}
   catch
@@ -111,11 +113,7 @@ defmodule Yamlixir do
       {:error, %Yamlixir.DecodingError{}}
   end
 
-  defp at(decoded, options) do
-    case Keyword.get(options, :at) do
-      nil -> decoded
-      at when is_integer(at) -> Enum.at(decoded, at)
-      _ -> raise ArgumentError, "value given to option `:at` must be an integer"
-    end
-  end
+  defp at(decoded, at) when is_integer(at), do: Enum.at(decoded, at)
+  defp at(decoded, nil), do: decoded
+  defp at(_decoded, _), do: raise(ArgumentError, "value given to option `:at` must be an integer")
 end
