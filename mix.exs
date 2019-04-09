@@ -6,11 +6,11 @@ defmodule Yamlixir.MixProject do
   def project do
     [
       app: :yamlixir,
-      version: "1.0.0",
+      version: "1.0.1",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      description: "WIP: YAML parser for Elixir.",
+      description: "YAML parser for Elixir.",
       package: package(),
       aliases: aliases(),
       source_url: @project_url,
