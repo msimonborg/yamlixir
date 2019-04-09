@@ -39,6 +39,18 @@ defmodule Yamlixir do
       iex> Yamlixir.decode("a: b\nc: d")
       {:ok, [%{"a" => "b", "c" => "d"}]}
 
+      iex> Yamlixir.decode("---\na: b\nc: d\n---\ne: f\ng: h")
+      {:ok, [%{"a" => "b", "c" => "d"}, %{"e" => "f", "g" => "h"}]}
+
+      iex> Yamlixir.decode("---\na: b\nc: d\n---\ne: f\ng: h", at: 0)
+      {:ok, %{"a" => "b", "c" => "d"}}
+
+      iex> Yamlixir.decode("---\na: b\nc: d\n---\ne: f\ng: h", at: -1)
+      {:ok, %{"e" => "f", "g" => "h"}}
+
+      iex> Yamlixir.decode("---\na: b\nc: d\n---\ne: f\ng: h", at: -1, keys: :atoms)
+      {:ok, %{e: "f", g: "h"}}
+
   """
   @spec decode(yaml, options) :: {:ok, decoded} | {:error, error}
   def decode(yaml, options \\ []), do: do_decode(yaml, options)
@@ -60,6 +72,18 @@ defmodule Yamlixir do
 
       iex> Yamlixir.decode!("a: b\nc: d")
       [%{"a" => "b", "c" => "d"}]
+
+      iex> Yamlixir.decode!("---\na: b\nc: d\n---\ne: f\ng: h")
+      [%{"a" => "b", "c" => "d"}, %{"e" => "f", "g" => "h"}]
+
+      iex> Yamlixir.decode!("---\na: b\nc: d\n---\ne: f\ng: h", at: 0)
+      %{"a" => "b", "c" => "d"}
+
+      iex> Yamlixir.decode!("---\na: b\nc: d\n---\ne: f\ng: h", at: -1)
+      %{"e" => "f", "g" => "h"}
+
+      iex> Yamlixir.decode!("---\na: b\nc: d\n---\ne: f\ng: h", at: -1, keys: :atoms)
+      %{e: "f", g: "h"}
 
   """
   @spec decode!(yaml, options) :: decoded
