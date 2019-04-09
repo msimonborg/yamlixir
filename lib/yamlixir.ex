@@ -17,6 +17,13 @@ defmodule Yamlixir do
 
   Returns `{:ok, decoded}` on success and `{:error, %Yamlixir.DecodingError{}}` on failure.
 
+  ## Options
+
+    * `:at` - Returns only the document at the given position in the list of documents. Expects input to be an integer.
+    * `:keys` - Controls how keys in maps are decoded. Defaults to strings. Possible values are:
+      * `:atoms` - keys are converted to atoms using `String.to_atom/1`
+      * `:atoms!` - keys are converted to atoms using `String.to_existing_atom/1`
+
   ## Examples
 
       iex> Yamlixir.decode("")
@@ -68,6 +75,10 @@ defmodule Yamlixir do
   It passes the string to `decode!/2`, returning the decoded data. Raises a
   `Yamlixir.DecodingError` exception when given invalid YAML.
 
+  ## Modifiers
+
+    * `a`: keys are converted to atoms using `String.to_existing_atom/1`
+
   ## Examples
 
       import Yamlixir, only: [sigil_y: 2]
@@ -80,6 +91,7 @@ defmodule Yamlixir do
   """
   @spec sigil_y(yaml, list) :: decoded
   def sigil_y(yaml, []), do: decode!(yaml)
+  def sigil_y(yaml, [?a]), do: decode!(yaml, keys: :atoms!)
 
   defp do_decode(yaml, options) do
     options = Keyword.merge(options, @default_options)
@@ -87,7 +99,7 @@ defmodule Yamlixir do
     decoded =
       yaml
       |> :yamerl_constr.string(options)
-      |> Yamlixir.YamerlParser.parse()
+      |> Yamlixir.YamerlParser.parse(options)
       |> at(options)
 
     {:ok, decoded}

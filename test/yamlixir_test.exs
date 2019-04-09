@@ -80,6 +80,31 @@ defmodule YamlixirTest do
            ] == Yamlixir.decode!(yaml)
   end
 
+  test "decode/2 option `keys: :atoms` converts map keys to atoms" do
+    yaml = fixture("nested")
+
+    assert {:ok,
+            [
+              %{
+                dev: %{foo: "bar"},
+                prod: %{foo: "foo"},
+                test: %{foo: "baz"}
+              }
+            ]} == Yamlixir.decode(yaml, keys: :atoms)
+  end
+
+  test "decode!/2 option `keys: :atoms` converts map keys to atoms" do
+    yaml = fixture("nested")
+
+    assert [
+             %{
+               dev: %{foo: "bar"},
+               prod: %{foo: "foo"},
+               test: %{foo: "baz"}
+             }
+           ] == Yamlixir.decode!(yaml, keys: :atoms)
+  end
+
   test "decode/2 should decode yaml with multiple documents" do
     yaml = fixture("multi")
 
@@ -176,6 +201,17 @@ defmodule YamlixirTest do
     """
 
     assert [%{"a" => "A", "b" => 1}] == yaml
+  end
+
+  test "sigil_y/2 accepts `:atoms` option" do
+    import Yamlixir, only: [sigil_y: 2]
+
+    yaml = ~y"""
+    a: A
+    b: 1
+    """a
+
+    assert [%{a: "A", b: 1}] == yaml
   end
 
   test "sigil_y/2 raises an exception with invalid yaml" do
