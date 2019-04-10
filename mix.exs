@@ -46,11 +46,7 @@ defmodule Yamlixir.MixProject do
     ]
   end
 
-  defp aliases do
-    [
-      "yamlixir.build": ["format --check-equivalent", "test", "docs"]
-    ]
-  end
+  defp aliases, do: []
 
   defp preferred_cli_env do
     [
