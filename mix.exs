@@ -16,6 +16,7 @@ defmodule Yamlixir.MixProject do
       source_url: @project_url,
       homepage_url: @project_url,
       preferred_cli_env: preferred_cli_env(),
+      test_coverage: [tool: ExCoveralls],
       name: "Yamlixir"
     ]
   end
@@ -31,7 +32,10 @@ defmodule Yamlixir.MixProject do
   defp deps do
     [
       {:yamerl, "~> 0.7"},
-      {:ex_doc, "~> 0.19.3", only: [:dev, :test]}
+      {:ex_doc, "~> 0.19.3", only: [:dev, :test]},
+      {:excoveralls, "~> 0.10", only: :test},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:inch_ex, "~> 2.0", only: [:dev, :test]}
     ]
   end
 
@@ -50,6 +54,13 @@ defmodule Yamlixir.MixProject do
 
   defp preferred_cli_env do
     [
+      coveralls: :test,
+      "coveralls.detail": :test,
+      "coveralls.post": :test,
+      "coveralls.html": :test,
+      "coveralls.travis": :test,
+      "coveralls.safe_travis": :test,
+      "receiver.build": :test,
       "yamlixir.build": :test
     ]
   end
