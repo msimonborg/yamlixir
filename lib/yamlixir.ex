@@ -106,12 +106,17 @@ defmodule Yamlixir do
 
   ## Examples
 
-      import Yamlixir, only: [sigil_y: 2]
-      ~y\"\"\"
-      a: b
-      c: d
-      \"\"\"
-      #=> [%{"a" => "b", "c" => "d"}]
+      iex> ~y\"\"\"
+      ...> a: b
+      ...> c: d
+      ...> \"\"\"
+      [%{"a" => "b", "c" => "d"}]
+
+      iex> ~y\"\"\"
+      ...> a: b
+      ...> c: d
+      ...> \"\"\"a
+      [%{a: "b", c: "d"}]
 
   """
   @spec sigil_y(yaml, list) :: decoded

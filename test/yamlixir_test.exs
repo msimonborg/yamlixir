@@ -1,5 +1,6 @@
 defmodule YamlixirTest do
   use ExUnit.Case, async: true
+  import Yamlixir, only: [sigil_y: 2]
   doctest Yamlixir
 
   test "decode/2 should decode blank yaml" do
@@ -193,8 +194,6 @@ defmodule YamlixirTest do
   end
 
   test "sigil_y/2 decodes yaml" do
-    import Yamlixir, only: [sigil_y: 2]
-
     yaml = ~y"""
     a: A
     b: 1
@@ -204,8 +203,6 @@ defmodule YamlixirTest do
   end
 
   test "sigil_y/2 accepts `:atoms` option" do
-    import Yamlixir, only: [sigil_y: 2]
-
     yaml = ~y"""
     a: A
     b: 1
@@ -215,8 +212,6 @@ defmodule YamlixirTest do
   end
 
   test "sigil_y/2 raises an exception with invalid yaml" do
-    import Yamlixir, only: [sigil_y: 2]
-
     assert_raise Yamlixir.DecodingError, "decoding error", fn ->
       ~y":"
     end
