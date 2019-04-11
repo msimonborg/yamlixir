@@ -1,4 +1,5 @@
 # Yamlixir
+[![Build Status](https://travis-ci.org/msimonborg/yamlixir.svg?branch=master)](https://travis-ci.org/msimonborg/yamlixir)
 
 A simple YAML decoder for Elixir.
 
