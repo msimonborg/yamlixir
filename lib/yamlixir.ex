@@ -94,7 +94,7 @@ defmodule Yamlixir do
     end
   end
 
-  @doc ~s"""
+  @doc """
   Handles the sigil `~y` for decoding YAML.
 
   It passes the string to `decode!/2`, returning the decoded data. Raises a
@@ -134,12 +134,11 @@ defmodule Yamlixir do
       |> at(options[:at])
 
     {:ok, decoded}
+  rescue
+    FunctionClauseError -> {:error, %Yamlixir.DecodingError{}}
   catch
     {:yamerl_exception, [{_, _, message, _, _, :no_matching_anchor, _, _}]} ->
       {:error, %Yamlixir.DecodingError{message: List.to_string(message)}}
-
-    _, _ ->
-      {:error, %Yamlixir.DecodingError{}}
   end
 
   defp at(decoded, at) when is_integer(at), do: Enum.at(decoded, at)
