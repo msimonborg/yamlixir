@@ -1,5 +1,6 @@
 # Yamlixir
 [![Build Status](https://travis-ci.org/msimonborg/yamlixir.svg?branch=master)](https://travis-ci.org/msimonborg/yamlixir)
+[![Coverage Status](https://coveralls.io/repos/github/msimonborg/yamlixir/badge.svg?branch=master)](https://coveralls.io/github/msimonborg/yamlixir?branch=master)
 
 A simple YAML decoder for Elixir.
 
